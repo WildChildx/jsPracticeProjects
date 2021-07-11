@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .centre {
+            margin: auto;
+            padding: 3%;
+            width: 50%;
+            text-align: center;
+            border: 2px solid rgb(44, 44, 44);
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="centre">
+        <h1>SubString Finder</h1>
+        <h2>Enter your sentence</h2>
+        <input type="text" id="string">
+        <h2>Enter a character</h2>
+        <input type="text" id="char">
+        <br><br>
+        <button id="find">Submit</button>
+        <h2>Your sub-string is </h2>
+        <span id="subString"></span>
+    </div>
+
+    <script>
+        let find = document.getElementById('find');
+        let subStr = document.getElementById('subString');
+        find.addEventListener('click', () => {
+            let str = document.getElementById('string').value;
+            let char = document.getElementById('char').value;
+            let index;
+            //check for the position of the character
+            for (let i = 0; i < str.length; i++) {
+                if (char == str[i]) {
+                    index = i;
+                    break;
+                }
+            }
+            subStr.innerHTML = str.slice(index + 1, str.length);
+        })
+
+    </script>
+</body>
+
+</html>

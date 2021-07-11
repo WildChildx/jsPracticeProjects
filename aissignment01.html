@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <title>Magic Table</title>
+</head>
+
+<body>
+
+    <div class="container my-4">
+        <h2 class="text-center">Magic Table</h2>
+
+        <div class="form-group">
+            <label for="title">First Name</label>
+            <input type="text" class="form-control" id="fName" aria-describedby="emailHelp">
+        </div>
+
+        <div class="form-group">
+            <label for="title">Last Name</label>
+            <input type="text" class="form-control" id="lName" aria-describedby="emailHelp">
+        </div>
+
+        <div class="form-group">
+            <label for="title">City</label>
+            <input type="text" class="form-control" id="city" aria-describedby="emailHelp">
+        </div>
+
+        <div class="form-group">
+            <label for="title">Country</label>
+            <input type="text" class="form-control" id="country" aria-describedby="emailHelp">
+        </div>
+
+        <button id="append" class="btn btn-primary">Add at end</button>
+        <button id="unshift" class="btn btn-primary">Add to top</button>
+        <button id="clear" class="btn btn-primary" onclick="clearStorage()">Clear list</button>
+
+
+        <div id="items" class="my-4">
+            <h2>Your Items</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">SNo</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">City</th>
+                        <th scope="col">Country</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+    <script>
+
+        //add five rows if running for first time
+        let firstTime = true;
+        if (firstTime) {
+            addFiveRows();
+        } else {
+            update();
+        }
+
+        //to add five rows 
+        function addFiveRows() {
+            itemJsonArray = [];
+            fiveRows = [["Shree", "Chatane", "Pune", "India"], ["Dani", "Shwarts", "West-Coast", "Carolina"], ["Lana", "Adams", "Boston", "US"], ["Amanda", "Francico", "Paris", "France"], ["Lalu", "Prasad", "Nagpur", "India"]];
+            for (let i = 0; i < fiveRows.length; i++) {
+                itemJsonArray[i] = fiveRows[i];
+            }
+            localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray));
+        }
+
+
+        //add the element to bottom
+        function addAtEnd() {
+            console.log("Updating List...");
+            fName = document.getElementById('fName').value;
+            lName = document.getElementById('lName').value;
+            city = document.getElementById('city').value;
+            country = document.getElementById('country').value;
+            if (localStorage.getItem('itemsJson') == null) {
+                itemJsonArray = [];
+                itemJsonArray.push([fName, lName, city, country]);
+                localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray))
+            }
+            else {
+                itemJsonArrayStr = localStorage.getItem('itemsJson')
+                itemJsonArray = JSON.parse(itemJsonArrayStr);
+                itemJsonArray.push([fName, lName, city, country]);
+                localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray))
+            }
+            update();
+        }
+
+        //adds the element to the top
+        function addToTop() {
+            console.log("Updating List...");
+            fName = document.getElementById('fName').value;
+            lName = document.getElementById('lName').value;
+            city = document.getElementById('city').value;
+            country = document.getElementById('country').value;
+            if (localStorage.getItem('itemsJson') == null) {
+                itemJsonArray = [];
+                itemJsonArray.unshift([fName, lName, city, country]);
+                localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray))
+            }
+            else {
+                itemJsonArrayStr = localStorage.getItem('itemsJson')
+                itemJsonArray = JSON.parse(itemJsonArrayStr);
+                itemJsonArray.unshift([fName, lName, city, country]);
+                localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray))
+            }
+            update();
+        }
+
+        //display function for displaying the list
+        function update() {
+            if (localStorage.getItem('itemsJson') == null) {
+                itemJsonArray = [];
+                localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray))
+            }
+            else {
+                itemJsonArrayStr = localStorage.getItem('itemsJson')
+                itemJsonArray = JSON.parse(itemJsonArrayStr);
+            }
+
+            // Populate the table
+            let tableBody = document.getElementById("tableBody");
+            let str = "";
+            itemJsonArray.forEach((element, index) => {
+                str += `
+                    <tr>
+                    <th scope="row">${index + 1}</th>
+                    <td>${element[0]}</td>
+                    <td>${element[1]}</td> 
+                    <td>${element[2]}</td> 
+                    <td>${element[3]}</td> 
+                    </tr>`;
+            });
+            tableBody.innerHTML = str;
+        }
+
+        //onclicking append
+        append = document.getElementById("append");
+        append.addEventListener("click", addAtEnd);
+
+        //onclicking unshift
+        unshift = document.getElementById("unshift");
+        unshift.addEventListener('click', addToTop);
+
+        //displaying the list of items
+        update();
+
+        //clearing localstorage
+        function clearStorage() {
+            if (confirm("Do you areally want to clear?")) {
+                console.log('Clearing the storage')
+                localStorage.clear();
+                update();
+            }
+            alert('Refresh the page to get five rows');
+        }
+    </script>
+</body>
+
+</html>
